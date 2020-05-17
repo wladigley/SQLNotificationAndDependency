@@ -1,0 +1,35 @@
+Usuario deve ser diferente do SA
+Uduario de ter permissão 'sysadmin'
+
+USE master 
+CREATE LOGIN RenataDba WITH PASSWORD = '123456';
+GO
+USE ENOVAR
+GO
+CREATE USER RenataDba   
+FOR LOGIN RenataDba
+GO
+ALTER SERVER ROLE sysadmin ADD MEMBER RenataDba
+
+
+USE ENOVAR; 
+GRANT SUBSCRIBE QUERY NOTIFICATIONS TO RenataDba; 
+GO
+ALTER DATABASE ENOVAR SET ENABLE_BROKER with rollback immediate
+GO
+
+select
+ [id]
+ ,[data]
+ ,[loja]
+ ,[cliente]
+ ,[valor]
+from [dbo].[vendas]
+
+--teste insert
+insert into vendas 
+(id,data,loja,cliente,valor)
+values (67,'2020-05-17','LOJA 1','CLIENTE KWY', 12.3)
+
+--teste update
+update vendas set loja = 'LOJA 2' where id = 63
