@@ -1,5 +1,5 @@
 Usuario deve ser diferente do SA
-Uduario de ter permissão 'sysadmin'
+Uduario deve ter permissão 'sysadmin'
 
 USE master 
 CREATE LOGIN RenataDba WITH PASSWORD = '123456';

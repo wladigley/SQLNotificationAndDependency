@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 
 namespace ConsoleAppSqlDependency
 {
     class Program
     {
-        private static string connectionString = "Data Source=DIGLEY-PC;Initial Catalog=ENOVAR;User ID=DigleyDba;Password=123456";
+        private static string connectionString = "Data Source=DIGLEY-PC;Initial Catalog=ENOVAR;User ID=RenataDba;Password=123456";
         static void Main(string[] args)
         {
             StartListening();
@@ -21,12 +18,17 @@ namespace ConsoleAppSqlDependency
             {
                 using (var cn = new SqlConnection(connectionString))
                 {
+                    //O metodo start deve ser acionado antes da conexão ser aberta
                     SqlDependency.Start(cn.ConnectionString);
                     cn.Open();
-                    //SqlDependency.Stop(cn.ConnectionString);
+                    // Declar o metodo stop quando for necessa´rio interromper a escuta
+                    // SqlDependency.Stop(cn.ConnectionString);
                     using (var cmd = cn.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
+                        // esste script dever ser padrão 
+                        // este script será utilizado para ser vir de escuta, de forma quando houver alteração 
+                        // Acionará seu handle
                         cmd.CommandText = @"
                         select
                          [id]
@@ -39,10 +41,9 @@ namespace ConsoleAppSqlDependency
 
                         cmd.Notification = null;
 
-                        //  creates a new dependency for the SqlCommand
+                        //  cria-se uma dependecia para o SQLCommand
                         SqlDependency dep = new SqlDependency(cmd);
-                        //  creates an event handler for the notification of data
-                        //      changes in the database.
+                        //  Cria a ação para quando houver alteração no banco de dados
                         dep.OnChange += Dep_OnChange;
 
                         cmd.ExecuteReader();
